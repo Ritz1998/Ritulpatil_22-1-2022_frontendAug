@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/material.css'
 import 'codemirror/mode/xml/xml'
@@ -6,6 +6,7 @@ import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/css/css'
 
 import {Controlled } from 'react-codemirror2'
+
 
 function Editor(props) {
     const {
@@ -15,14 +16,17 @@ function Editor(props) {
         onChange
     }=props
 
+    const[toggle,setToggle]=useState(true)
+
+
     function handleChange(editor,data,value){
         onChange(value)
     }
     return (
-        <div className='editor-container'>
+        <div className={`editor-container ${toggle?'':'end'}`}>
            <div className='editor-title'>
                {displayName}
-               <button>O/C</button>
+               <button onClick={()=>setToggle(prev=>!prev)}>exp/ret</button>
            </div>
            <Controlled
            onBeforeChange={handleChange}
@@ -33,7 +37,7 @@ function Editor(props) {
                lint:true,
                mode:language,
                theme:'material',
-               lineNumber:true
+               lineNumbers:true
            }}
            />
            

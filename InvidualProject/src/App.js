@@ -1,12 +1,27 @@
-import React ,{useState}from 'react'
+import React ,{useState,useEffect}from 'react'
 import './App.css';
 import  Editor from './Components/Editor'
+import useLocalStorage from './Hooks/useLocalStorage'
 
 function App() {
 
- const [html, setHtml] = useState('')
- const [css, setCss] = useState('')
- const [js, setJs] = useState('')
+ const [html, setHtml] = useLocalStorage('html','')
+ const [css, setCss] = useLocalStorage('css','')
+ const [js, setJs] = useLocalStorage('js','')
+ const [doc, setDoc] = useLocalStorage('');
+ useEffect(() => {
+     const timer=setTimeout(()=>{
+      setDoc(`
+      <html>
+      <body>${html}</body>
+      <style>${css}</style>
+      <script>${js}</script>
+      </html>
+      `)
+     },250)
+     return ()=>clearTimeout(timer)
+ }, [html,css,js]);
+ 
   return (
     <>
     
@@ -32,6 +47,7 @@ function App() {
     <div className='pane'>
 
       <iframe 
+     srcDoc={doc}
       title='output'
       sandbox='allow-scripts'
       frameBorder='0'
